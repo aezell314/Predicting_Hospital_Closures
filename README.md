@@ -4,18 +4,19 @@ This project combines financial health, operational metrics, and local demograph
 
 Possible datasets to use:
 
-1. Core Hospital Financial & Operational Data (CMS)
+1. Core Hospital Financial & Operational Data (CMS) \
 The Centers for Medicare & Medicaid Services (CMS) provides the most comprehensive data on hospital financial health.
-CMS Healthcare Cost Report Information System (HCRIS): This is the definitive source. It includes annual cost reports, containing revenue, costs, facility characteristics, utilization data, and financial statements organized by CMS Certification Number (CCN). 
+CMS Healthcare Cost Report Information System (HCRIS): This is the definitive source. It includes annual cost reports, containing revenue, costs, facility characteristics, utilization data, and financial statements organized by CMS Certification Number (CCN).
+
 AHRQ Hospital Financial Measures Database (HFMD): Created by the Agency for Healthcare Research and Quality, this database contains measures of profitability, liquidity, and capital structure specifically for short-term acute care hospitals, covering 2016–2019. 
 Provider Data Catalog / Care Compare: Contains hospital quality ratings and compliance data, which can serve as indicators of operational issues. 
 
-2. Hospital Closure & Regional Data (Government & Academic)
+3. Hospital Closure & Regional Data (Government & Academic)
 Sheps Center Rural Hospital Closures Database: The definitive list of rural hospital closures and conversions (stop-start inpatient services) since 2005. Helpful for labeling the target variable (closure). 
 HRSA Area Health Resources Files (AHRF): A comprehensive county-level database covering health professions, health facilities, population demographics, economics, and utilization. 
 USDA Rural Economy & Population Data: Useful for finding socioeconomic factors that contribute to regional healthcare failure. 
 
-3. Alternative/Complementary Data Sources
+4. Alternative/Complementary Data Sources
 IRS Form 990 (Non-profit data): Nonprofit hospitals must file Form 990, which contains detailed financial information and can be retrieved through platforms like ProPublica’s Nonprofit Explorer.
 RAND Hospital Price Transparency Study: Offers insights into hospital pricing relative to Medicare rates.
 Electronic Municipal Market Access (EMMA): Provides audited financial statements for hospitals that issue municipal debt. 
