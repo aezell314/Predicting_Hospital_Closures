@@ -1,8 +1,8 @@
 # Predicting US Hospital and Clinic Closures
 
-This project combines financial health, operational metrics, and local demographic data to predict the likelihood that a US hospital or clinic will close within the next 5 or 10 years. We will use XGBoost or Random Forest to analyze 5- and 10-year longitudinal data, looking at features including operating margins, patient volume, ownership structure (for-profit vs. non-profit), and regional population changes. 
+This project combines financial health, operational metrics, and local demographic data to predict the likelihood that a rural US acute care hospital will close within the next 5 or 10 years. I'll use XGBoost or Random Forest to analyze 5- and 10-year longitudinal data, looking at features including operating margins, patient volume, ownership structure (for-profit vs. non-profit), and regional population changes. 
 
-Possible datasets to use:
+Key datasets:
 
 1. Core Hospital Financial & Operational Data (CMS) \
 The Centers for Medicare & Medicaid Services (CMS) provides the most comprehensive data on hospital financial health.
