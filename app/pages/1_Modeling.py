@@ -44,7 +44,7 @@ Time series 5-fold cross-validation allowed for the tuning of the l1_ratio and a
 
 st.subheader('Model Evaluation')
 '''
-Cox Regression models are often evaluated using their **concordance index*** (often called **Harrell's C-index**), which is essentially the survival analysis equivalent to the ROC-AUC metric.
+Cox Regression models are often evaluated using their **concordance index** (often called **Harrell's C-index**), which is essentially the survival analysis equivalent to the ROC-AUC metric.
 The concordance index calculates every possible pairs of hospitals in the dataset and checks whether the predicted risk score was higher for the hospital that closed earlier. If so, the model's prediction was accurate and the pair is considered "concordant".
 
 Since our data has a high rate of censoring (hospitals not closing within the given time frame), the Concordance Index can be overly optimistic. 

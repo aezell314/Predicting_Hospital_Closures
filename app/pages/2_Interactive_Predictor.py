@@ -2,7 +2,9 @@ import streamlit as st
 import joblib
 import pandas as pd
 import utils
- 
+import numpy as np
+import shap
+import matplotlib.pyplot as plt
  
 st.set_page_config(
     page_title="Rural Hospital Risk Dashboard",
@@ -18,16 +20,17 @@ st.set_page_config(
 def load_artifacts():
     model = joblib.load("./data/hospital_closure_model.pkl")
     preprocessor = joblib.load("./data/preprocessor.pkl")
-    train_data = utils.train  # raw, unprocessed training data
+    train_unscaled = utils.train_unscaled  # raw, unprocessed training data
+    train_scaled = utils.train_scaled  # preprocessed training data
     test_data = utils.test # preprocessed test data with predicted risk scores appended
-    return model, preprocessor, train_data, test_data
+    return model, preprocessor, train_unscaled, train_scaled, test_data
  
  
 @st.cache_data
  
-def build_baseline_features(train_data: pd.DataFrame) -> dict:
-    med = lambda col: train_data[col].median()
-    mode = lambda col: train_data[col].mode()[0]
+def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
+    med = lambda col: train_unscaled[col].median()
+    mode = lambda col: train_unscaled[col].mode()[0]
  
     return {
         "Medicaid charges": med("Medicaid charges"),
@@ -210,8 +213,8 @@ def build_features(baseline_features: dict, inputs: dict) -> dict:
 # -----------------------------
 # Load data and artifacts
 # -----------------------------
-model, preprocessor, train_data, test_data = load_artifacts()
-baseline_features = build_baseline_features(train_data)
+model, preprocessor, train_unscaled, train_scaled, test_data = load_artifacts()
+baseline_features = build_baseline_features(train_unscaled)
  
  
 # -----------------------------
@@ -246,15 +249,15 @@ with left:
         st.subheader("Financial Indicators")
         debt_ratio = st.slider(
             "Debt Ratio",
-            float(train_data["Financial Indicators: SOLVENCY Debt Ratio"].min()),
-            float(train_data["Financial Indicators: SOLVENCY Debt Ratio"].max()),
+            float(train_unscaled["Financial Indicators: SOLVENCY Debt Ratio"].min()),
+            float(train_unscaled["Financial Indicators: SOLVENCY Debt Ratio"].max()),
             float(baseline_features["Financial Indicators: SOLVENCY Debt Ratio"]),
             help="Total Liabilities / Total Assets",
         )
         equity_ratio = st.slider(
             "Equity Ratio",
-            float(train_data["Financial Indicators: SOLVENCY Equity Ratio"].min()),
-            float(train_data["Financial Indicators: SOLVENCY Equity Ratio"].max()),
+            float(train_unscaled["Financial Indicators: SOLVENCY Equity Ratio"].min()),
+            float(train_unscaled["Financial Indicators: SOLVENCY Equity Ratio"].max()),
             float(baseline_features["Financial Indicators: SOLVENCY Equity Ratio"]),
             help="Total Net Assets or Equity / Total Assets",
         )
@@ -264,12 +267,12 @@ with left:
         medicare_inpatient_days = st.slider(
             "Per Capita Medicare Inpatient Days",
             float(
-                train_data[
+                train_unscaled[
                     "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
                 ].min()
             ),
             float(
-                train_data[
+                train_unscaled[
                     "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
                 ].max()
             ),
@@ -283,12 +286,12 @@ with left:
         gen_hosp_admissions = st.slider(
             "Per Capita Short Term General Hospital Admissions",
             float(
-                train_data[
+                train_unscaled[
                     "Per Capita Short Term Gen Hosp Admissions"
                 ].min()
             ),
             float(
-                train_data[
+                train_unscaled[
                     "Per Capita Short Term Gen Hosp Admissions"
                 ].max()
             ),
@@ -392,34 +395,53 @@ if evaluate:
         status_color = "green"
  
     st.markdown("---")
-    result_left, result_right = st.columns([1.15, 1])
- 
-    with result_left:
+    # 1. Top Section: Scorecard in a 2-column layout
+    score_left, score_right = st.columns([1.15, 1])
+
+    with score_left:
         st.subheader(f":{status_color}-background[{status_text}]")
         st.caption("Estimated closure risk score:")
-
-        st.metric(label="", value=f"{risk_score:.2f}")
-
+        st.metric(label="Risk Score", value=f"{risk_score:.2f}")
         st.caption(f"Threshold bands: Low ≤ {low_cutoff}, Moderate {low_cutoff}–{high_cutoff}, High ≥ {high_cutoff}")
- 
-    with result_right:
+
+    with score_right:
         with st.container(border=True):
             st.subheader("Summary")
             st.write(f"This hospital has a **{score_class}** chance of closing.")
-            max_score = round(test_data['Pred_Closure'].max(),2)
-            st.progress(risk_score / max_score)
-            st.caption("Progress bar is a visual aid, not a calibrated probability.")
- 
-        with st.container(border=True):
-            st.subheader("Input Values")
-            st.write("The prediction is driven primarily by the values you changed above.")
-            st.write(
-                f"- Debt Ratio: **{debt_ratio:.3f}**\n"
-                f"- Equity Ratio: **{equity_ratio:.3f}**\n"
-                f"- Medicare Inpatient Days: **{medicare_inpatient_days:.3f}**\n"
-                f"- Ownership: **{own_types[gen_own_type]}**\n"
-                f"- Hospital Type: **{hospital_type}**"
-            )
- 
-else:
-    st.info("Adjust the inputs and click **Evaluate Hospital** to generate a risk assessment.")
+            
+            max_score = round(test_data['Pred_Closure'].max(), 2)
+            min_score = round(test_data['Pred_Closure'].min(), 2)
+            
+            if risk_score <= min_score:
+                st.progress(0)
+            elif risk_score >= max_score:
+                st.progress(1)
+            else:
+                st.progress((risk_score - min_score) / (max_score - min_score))
+            st.caption("Progress bar is a visual aid, not a probability.")
+
+    st.subheader("SHAP Plot")
+    st.write("The prediction is driven primarily by the following features:")
+
+    # Sample the train data for faster runtime
+    feature_cols = [col for col in train_scaled.columns if col not in ['CCN', 'Status', 'Time', 'Year']]
+    X_train = train_scaled[feature_cols]
+    X_train_summary = shap.sample(X_train.to_numpy(), nsamples=100)
+
+    # Pass the sampled train data to the explainer
+    explainer = shap.KernelExplainer(model.predict, X_train_summary)
+
+    # Compute SHAP values for test data
+    shap_values = explainer.shap_values(features_df)
+    exp = shap.Explanation(
+        values=shap_values,
+        base_values=explainer.expected_value,
+        data=features_df,
+        feature_names=feature_cols
+    )
+
+    # Render SHAP plot
+    fig, ax = plt.subplots(figsize=(10, 6)) # Increased figure size
+    shap.plots.waterfall(exp[0])
+    plt.tight_layout()
+    st.pyplot(fig)
