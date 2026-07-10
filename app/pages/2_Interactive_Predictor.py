@@ -16,18 +16,16 @@ st.set_page_config(
 # Helpers
 # -----------------------------
 @st.cache_resource
- 
 def load_artifacts():
     model = joblib.load("./data/hospital_closure_model.pkl")
     preprocessor = joblib.load("./data/preprocessor.pkl")
     train_unscaled = utils.train_unscaled  # raw, unprocessed training data
     train_scaled = utils.train_scaled  # preprocessed training data
-    test_data = utils.test # preprocessed test data with predicted risk scores appended
+    test_data = utils.test  # preprocessed test data with predicted risk scores appended
     return model, preprocessor, train_unscaled, train_scaled, test_data
  
  
 @st.cache_data
- 
 def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
     med = lambda col: train_unscaled[col].median()
     mode = lambda col: train_unscaled[col].mode()[0]
@@ -65,10 +63,9 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
             "REIMBURSEMENT SETTLEMENT: Interim payments"
         ),
         "Total Bad Debt expense": med("Total Bad Debt expense"),
-        "TRIAL BALANCE OF EXPENSE ACCOUNTS: Interest Expense (A_C2_113)": med(
-            "TRIAL BALANCE OF EXPENSE ACCOUNTS: Interest Expense (A_C2_113)"
+        "NUMBER OF BEDS: Adults & Pediatrics": med(
+            "NUMBER OF BEDS: Adults & Pediatrics"
         ),
-        "NUMBER OF BEDS: Adults & Pediatrics": med("NUMBER OF BEDS: Adults & Pediatrics"),
         "NUMBER OF BEDS: Total Hospital": med("NUMBER OF BEDS: Total Hospital"),
         "Total Inpatient Days": med("Total Inpatient Days"),
         "Total Days Title XVIII": med("Total Days Title XVIII"),
@@ -79,38 +76,61 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
         "Net Revenue from Medicaid": med("Net Revenue from Medicaid"),
         "Total Liabilities": med("Total Liabilities"),
         "HVBP payment adjustment amount": med("HVBP payment adjustment amount"),
-        "REIMBURSEMENT SETTLEMENT: Subtotal": med("REIMBURSEMENT SETTLEMENT: Subtotal"),
+        "REIMBURSEMENT SETTLEMENT: Subtotal": med(
+            "REIMBURSEMENT SETTLEMENT: Subtotal"
+        ),
         "IPPS Interim payment": med("IPPS Interim payment"),
-        "IPPS Payment amount (unadjusted)": med("IPPS Payment amount (unadjusted)"),
+        "IPPS Payment amount (unadjusted)": med(
+            "IPPS Payment amount (unadjusted)"
+        ),
         "RECONCILIATION OF CAPITAL COST CENTERS: Depreciation, Total (A7_3_C9_3)": med(
             "RECONCILIATION OF CAPITAL COST CENTERS: Depreciation, Total (A7_3_C9_3)"
         ),
         "BALANCE SHEET: Total Current Liabilities (G_C1THRU4_45)": med(
             "BALANCE SHEET: Total Current Liabilities (G_C1THRU4_45)"
         ),
-        "BALANCE SHEET: Inventory (G_C1THRU4_7)": med("BALANCE SHEET: Inventory (G_C1THRU4_7)"),
+        "BALANCE SHEET: Inventory (G_C1THRU4_7)": med(
+            "BALANCE SHEET: Inventory (G_C1THRU4_7)"
+        ),
         "STATEMENT OF REVENUES AND EXPENSES: Net Patient Revenue (G3_C1_3)": med(
             "STATEMENT OF REVENUES AND EXPENSES: Net Patient Revenue (G3_C1_3)"
         ),
-        "Financial Indicators: Total Net Assets": med("Financial Indicators: Total Net Assets"),
+        "Financial Indicators: Total Net Assets": med(
+            "Financial Indicators: Total Net Assets"
+        ),
         "S-10 DATA: Medicaid Costs": med("S-10 DATA: Medicaid Costs"),
-        "Financial Indicators: Cash Reserves": med("Financial Indicators: Cash Reserves"),
-        "Financial Indicators: Net Profit Margin": med("Financial Indicators: Net Profit Margin"),
-        "Financial Indicators: Operating Profit": med("Financial Indicators: Operating Profit"),
-        "Financial Indicators: Operating Profit Margin": med("Financial Indicators: Operating Profit Margin"),
-        "Financial Indicators: LIQUIDITY current ratio": med("Financial Indicators: LIQUIDITY current ratio"),
-        "Financial Indicators: LIQUIDITY acid-test ratio": med("Financial Indicators: LIQUIDITY acid-test ratio"),
+        "Financial Indicators: Cash Reserves": med(
+            "Financial Indicators: Cash Reserves"
+        ),
+        "Financial Indicators: Net Profit Margin": med(
+            "Financial Indicators: Net Profit Margin"
+        ),
+        "Financial Indicators: Operating Profit": med(
+            "Financial Indicators: Operating Profit"
+        ),
+        "Financial Indicators: Operating Profit Margin": med(
+            "Financial Indicators: Operating Profit Margin"
+        ),
+        "Financial Indicators: LIQUIDITY current ratio": med(
+            "Financial Indicators: LIQUIDITY current ratio"
+        ),
+        "Financial Indicators: LIQUIDITY acid-test ratio": med(
+            "Financial Indicators: LIQUIDITY acid-test ratio"
+        ),
         "Financial Indicators: LIQUIDITY acid-test ratio (variation)": med(
             "Financial Indicators: LIQUIDITY acid-test ratio (variation)"
         ),
-        "Financial Indicators: LIQUIDITY cash ratio": med("Financial Indicators: LIQUIDITY cash ratio"),
+        "Financial Indicators: LIQUIDITY cash ratio": med(
+            "Financial Indicators: LIQUIDITY cash ratio"
+        ),
         "Financial Indicators: SOLVENCY Debt-to-Equity Ratio": med(
             "Financial Indicators: SOLVENCY Debt-to-Equity Ratio"
         ),
-        "Financial Indicators: SOLVENCY Debt Ratio": med("Financial Indicators: SOLVENCY Debt Ratio"),
-        "Financial Indicators: SOLVENCY Equity Ratio": med("Financial Indicators: SOLVENCY Equity Ratio"),
-        "Financial Indicators: SOLVENCY Interest Coverage Ratio": med(
-            "Financial Indicators: SOLVENCY Interest Coverage Ratio"
+        "Financial Indicators: SOLVENCY Debt Ratio": med(
+            "Financial Indicators: SOLVENCY Debt Ratio"
+        ),
+        "Financial Indicators: SOLVENCY Equity Ratio": med(
+            "Financial Indicators: SOLVENCY Equity Ratio"
         ),
         "Financial Indicators: SOLVENCY total assets less total liabilities": med(
             "Financial Indicators: SOLVENCY total assets less total liabilities"
@@ -124,6 +144,7 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
         "Emergency Services": mode("Emergency Services"),
         "RUCA": mode("RUCA"),
         "Metro_Status": mode("Metro_Status"),
+        "Status": mode("Status"),
         "Hospital Type": mode("Hospital Type"),
         "nsurveys": med("nsurveys"),
         "rrate": med("rrate"),
@@ -152,47 +173,42 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
             "Dist Hosp By 80+% Util Rate Short Term General Hospitals"
         ),
         "Median Household Income": med("Median Household Income"),
-        "Per Capita # Short Term General Hosps": med("Per Capita # Short Term General Hosps"),
-        "Per Capita Hospital Admissions": med("Per Capita Hospital Admissions"),
+        "Per Capita # Short Term General Hosps": med(
+            "Per Capita # Short Term General Hosps"
+        ),
+        "Per Capita Hospital Admissions": med(
+            "Per Capita Hospital Admissions"
+        ),
         "Per Capita Hospital Beds": med("Per Capita Hospital Beds"),
-        "Per Capita Inpatient Days in ST Gen Hosp": med("Per Capita Inpatient Days in ST Gen Hosp"),
+        "Per Capita Inpatient Days in ST Gen Hosp": med(
+            "Per Capita Inpatient Days in ST Gen Hosp"
+        ),
         "Per Capita Personal Income": med("Per Capita Personal Income"),
         "Per Capita Phys,Primary Care, Patient Care Non-Fed": med(
             "Per Capita Phys,Primary Care, Patient Care Non-Fed"
         ),
-        "Per Capita Short Term Gen Hosp Admissions": med("Per Capita Short Term Gen Hosp Admissions"),
-        "Per Capita Short Term General Hosp Beds": med("Per Capita Short Term General Hosp Beds"),
-        "Per Capita Total Active D.O.s Non-Federal": med("Per Capita Total Active D.O.s Non-Federal"),
-        "Per Capita Total Active M.D.s Non-Federal": med("Per Capita Total Active M.D.s Non-Federal"),
+        "Per Capita Short Term Gen Hosp Admissions": med(
+            "Per Capita Short Term Gen Hosp Admissions"
+        ),
+        "Per Capita Short Term General Hosp Beds": med(
+            "Per Capita Short Term General Hosp Beds"
+        ),
+        "Per Capita Total Active D.O.s Non-Federal": med(
+            "Per Capita Total Active D.O.s Non-Federal"
+        ),
+        "Per Capita Total Active M.D.s Non-Federal": med(
+            "Per Capita Total Active M.D.s Non-Federal"
+        ),
         "Per Capita Total Medicare Inpatient Days Short Term General Hospitals": med(
             "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
         ),
-        "Per Capita Total Number Hospitals": med("Per Capita Total Number Hospitals"),
+        "Per Capita Total Number Hospitals": med(
+            "Per Capita Total Number Hospitals"
+        ),
         "Percent Persons in Poverty": med("Percent Persons in Poverty"),
         "Population Estimate": med("Population Estimate"),
         "Unemployment Rate, 16+": med("Unemployment Rate, 16+"),
-        "General Ownership Type": mode("General Ownership Type"),
     }
- 
- 
-def get_hospital_options(gen_own_type: str):
-    if gen_own_type == "govt":
-        return [
-            "Government - Federal",
-            "Government - Hospital District or Authority",
-            "Government - Local",
-            "Government - State",
-            "Governmental, Other",
-            "Tribal",
-       ]
-    if gen_own_type == "non-profit":
-        return [
-            "Non profit - Corporation",
-            "Voluntary non-profit - Church",
-            "Voluntary non-profit - Other",
-            "Voluntary non-profit - Private",
-        ]
-    return ["Physician", "Proprietary", "Proprietary, Corporation"]
  
  
 def build_features(baseline_features: dict, inputs: dict) -> dict:
@@ -206,7 +222,6 @@ def build_features(baseline_features: dict, inputs: dict) -> dict:
         "gen_hosp_admissions"
     ]
     features["Hospital Type"] = inputs["hospital_type"]
-    features["General Ownership Type"] = inputs["gen_own_type"]
     return features
  
  
@@ -218,11 +233,43 @@ baseline_features = build_baseline_features(train_unscaled)
  
  
 # -----------------------------
+# Defaults / reset support
+# -----------------------------
+defaults = {
+    "debt_ratio": float(baseline_features["Financial Indicators: SOLVENCY Debt Ratio"]),
+    "equity_ratio": float(baseline_features["Financial Indicators: SOLVENCY Equity Ratio"]),
+    "medicare_inpatient_days": float(
+        baseline_features[
+            "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
+        ]
+    ),
+    "gen_hosp_admissions": float(
+        baseline_features["Per Capita Short Term Gen Hosp Admissions"]
+    ),
+    "hospital_type": "Non-Profit",
+}
+ 
+for key, value in defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+ 
+ 
+def reset_inputs():
+    for key, value in defaults.items():
+        if key in st.session_state:
+            del st.session_state[key]  # Clear existing widget state
+        st.session_state[key] = value
+
+ 
+ 
+# -----------------------------
 # Sidebar
 # -----------------------------
 with st.sidebar:
     st.markdown("## About")
-    st.write("This dashboard estimates rural hospital closure risk using financial, operational, and county-level indicators.")
+    st.write(
+        "This dashboard estimates rural hospital closure risk using financial, operational, and county-level indicators."
+    )
  
     st.markdown("## How to use")
     st.write(
@@ -237,7 +284,9 @@ with st.sidebar:
     st.caption("Meant for decision support, not a diagnosis or final forecast.")
  
 st.header("Rural Hospital Risk Dashboard")
-st.caption("Decision-support interface to help assess closure risk using features most important to the Cox model.")
+st.caption(
+    "Decision-support interface to help assess closure risk using features most important to the Cox model."
+)
  
 # -----------------------------
 # Input area
@@ -251,17 +300,17 @@ with left:
             "Debt Ratio",
             float(train_unscaled["Financial Indicators: SOLVENCY Debt Ratio"].min()),
             float(train_unscaled["Financial Indicators: SOLVENCY Debt Ratio"].max()),
-            float(baseline_features["Financial Indicators: SOLVENCY Debt Ratio"]),
+            key="debt_ratio",
             help="Total Liabilities / Total Assets",
-        )
+       )
         equity_ratio = st.slider(
             "Equity Ratio",
             float(train_unscaled["Financial Indicators: SOLVENCY Equity Ratio"].min()),
             float(train_unscaled["Financial Indicators: SOLVENCY Equity Ratio"].max()),
-            float(baseline_features["Financial Indicators: SOLVENCY Equity Ratio"]),
+            key="equity_ratio",
             help="Total Net Assets or Equity / Total Assets",
         )
-
+ 
     with st.container(border=True):
         st.subheader("Area Health Resource Indicators")
         medicare_inpatient_days = st.slider(
@@ -276,50 +325,24 @@ with left:
                     "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
                 ].max()
             ),
-            float(
-                baseline_features[
-                    "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
-                ]
-            ),
+            key="medicare_inpatient_days",
             help="County-level utilization for Medicare inpatient days at Short Term General Hospitals (a facility that provides localized public medical, surgical, and emergency care where the average patient stay is less than 30 days)",
         )
         gen_hosp_admissions = st.slider(
             "Per Capita Short Term General Hospital Admissions",
-            float(
-                train_unscaled[
-                    "Per Capita Short Term Gen Hosp Admissions"
-                ].min()
-            ),
-            float(
-                train_unscaled[
-                    "Per Capita Short Term Gen Hosp Admissions"
-                ].max()
-            ),
-            float(
-                baseline_features[
-                    "Per Capita Short Term Gen Hosp Admissions"
-                ]
-            ),
+            float(train_unscaled["Per Capita Short Term Gen Hosp Admissions"].min()),
+            float(train_unscaled["Per Capita Short Term Gen Hosp Admissions"].max()),
+            key="gen_hosp_admissions",
             help="County-level utilization for total hospital admissions at short term general hospitals (a facility that provides localized public medical, surgical, and emergency care where the average patient stay is less than 30 days)",
         )
-
+ 
     with st.container(border=True):
         st.subheader("Hospital Information")
-        own_types = {
-            "non-profit": "Non-Profit",
-            "govt": "Government",
-            "for-profit": "For-Profit",
-        }
-        gen_own_type = st.radio(
-            "General Ownership Type",
-            options=list(own_types.keys()),
-            format_func=lambda x: own_types[x],
-            horizontal=True,
-        )
         hospital_type = st.radio(
             "Hospital Type",
-            options=get_hospital_options(gen_own_type),
+            options=["Non-Profit", "For-Profit", "Government"],
             horizontal=True,
+            key="hospital_type",
         )
  
 with right:
@@ -328,7 +351,7 @@ with right:
         st.write(
             "These inputs are compared against the training-set median to help explain the result."
         )
-
+ 
         changed_inputs = {
             "Debt Ratio": (debt_ratio, baseline_features["Financial Indicators: SOLVENCY Debt Ratio"]),
             "Equity Ratio": (equity_ratio, baseline_features["Financial Indicators: SOLVENCY Equity Ratio"]),
@@ -340,22 +363,26 @@ with right:
             ),
             "Per Capita Hospital Admissions": (
                 gen_hosp_admissions,
-                baseline_features[
-                    "Per Capita Short Term Gen Hosp Admissions"
-                ],
-            )
+                baseline_features["Per Capita Short Term Gen Hosp Admissions"],
+            ),
         }
-
+ 
         for label, (current, baseline) in changed_inputs.items():
             delta = current - baseline
             st.metric(label, f"{current:.3f}", delta=f"{delta:+.3f}")
-
+ 
     with st.container(border=True):
         st.subheader("Make Prediction")
         st.write("Click the button to evaluate the current configuration.")
-        evaluate = st.button("Evaluate Hospital", use_container_width=True, type="primary")
-
-
+        btn_left, btn_right = st.columns(2)
+        with btn_left:
+            evaluate = st.button("Evaluate Hospital", use_container_width=True, type="primary")
+        with btn_right:
+            reset = st.button("Reset to Defaults", use_container_width=True)
+            if reset:
+                reset_inputs()
+                st.rerun()
+ 
 # -----------------------------
 # Prediction
 # -----------------------------
@@ -365,7 +392,6 @@ if evaluate:
         "equity_ratio": equity_ratio,
         "medicare_inpatient_days": medicare_inpatient_days,
         "gen_hosp_admissions": gen_hosp_admissions,
-        "gen_own_type": gen_own_type,
         "hospital_type": hospital_type,
     }
  
@@ -376,8 +402,8 @@ if evaluate:
     prediction = model.predict(features_df)
     risk_score = float(prediction[0])
  
-    low_cutoff = round(test_data['Pred_Closure'].quantile(0.5),2)
-    high_cutoff = round(test_data['Pred_Closure'].quantile(0.9),2)
+    low_cutoff = round(test_data['Pred_Closure'].quantile(0.5), 2)
+    high_cutoff = round(test_data['Pred_Closure'].quantile(0.9), 2)
     if risk_score >= high_cutoff:
         score_class = "HIGH"
         risk_class = "risk-high"
@@ -395,23 +421,24 @@ if evaluate:
         status_color = "green"
  
     st.markdown("---")
-    # 1. Top Section: Scorecard in a 2-column layout
     score_left, score_right = st.columns([1.15, 1])
-
+ 
     with score_left:
         st.subheader(f":{status_color}-background[{status_text}]")
         st.caption("Estimated closure risk score:")
         st.metric(label="Risk Score", value=f"{risk_score:.2f}")
-        st.caption(f"Threshold bands: Low ≤ {low_cutoff}, Moderate {low_cutoff}–{high_cutoff}, High ≥ {high_cutoff}")
-
+        st.caption(
+            f"Threshold bands: Low ≤ {low_cutoff}, Moderate {low_cutoff}–{high_cutoff}, High ≥ {high_cutoff}"
+        )
+ 
     with score_right:
         with st.container(border=True):
             st.subheader("Summary")
             st.write(f"This hospital has a **{score_class}** chance of closing.")
-            
+ 
             max_score = round(test_data['Pred_Closure'].max(), 2)
             min_score = round(test_data['Pred_Closure'].min(), 2)
-            
+ 
             if risk_score <= min_score:
                 st.progress(0)
             elif risk_score >= max_score:
@@ -419,29 +446,24 @@ if evaluate:
             else:
                 st.progress((risk_score - min_score) / (max_score - min_score))
             st.caption("Progress bar is a visual aid, not a probability.")
-
+ 
     st.subheader("SHAP Plot")
     st.write("The prediction is driven primarily by the following features:")
-
-    # Sample the train data for faster runtime
+ 
     feature_cols = [col for col in train_scaled.columns if col not in ['CCN', 'Status', 'Time', 'Year']]
     X_train = train_scaled[feature_cols]
     X_train_summary = shap.sample(X_train.to_numpy(), nsamples=100)
-
-    # Pass the sampled train data to the explainer
+ 
     explainer = shap.KernelExplainer(model.predict, X_train_summary)
-
-    # Compute SHAP values for test data
     shap_values = explainer.shap_values(features_df)
     exp = shap.Explanation(
         values=shap_values,
         base_values=explainer.expected_value,
         data=features_df,
-        feature_names=feature_cols
+        feature_names=feature_cols,
     )
-
-    # Render SHAP plot
-    fig, ax = plt.subplots(figsize=(10, 6)) # Increased figure size
+ 
+    fig, ax = plt.subplots(figsize=(10, 6))
     shap.plots.waterfall(exp[0])
     plt.tight_layout()
     st.pyplot(fig)

@@ -16,7 +16,7 @@ Cox Regression models can be used either to test hypotheses about the independen
 However, these closures are not captured in the dataset, even as certain predictor values might be indicating an imminent closure. 
 This is referred to in survival analysis as "right-censoring". 
 
-The model predictions take the form of a risk score which is a linear combination of **Hazard Ratios (HR)**; the risk score indicates how much more or less likely a hospital is to close at any given time compared to a baseline group. 
+The model predictions take the form of a risk score which is the exponentiated sum of the regression coefficients; the risk score indicates how much more or less likely a hospital is to close at any given time compared to the baseline chance of closing. 
 
 The *scikit-survival* library was used to implement the model, since its penalized Cox model (*CoxnetSurvivalAnalysis*) supports Ridge and Lasso regularization. 
 This coefficient penalization is helpful for the high-dimensional data in this project. 
@@ -50,7 +50,7 @@ The concordance index calculates every possible pairs of hospitals in the datase
 Since our data has a high rate of censoring (hospitals not closing within the given time frame), the Concordance Index can be overly optimistic. 
 Thus, **Uno's concordance index** was used as the primary evaluation metric, which uses **Inverse Probability of Censoring Weights (IPCW)**, correcting for this over-optimism issue.
 
-The model achieved an Uno's concordance index score of **0.772** on the real-world test data, indicating a moderately strong association between the model's Hazard Ratio scores and the actual hospital closure outcomes.
+The model achieved an Uno's concordance index score of **0.988** on the real-world test data, indicating a very strong association between the model's Hazard Ratio scores and the actual hospital closure outcomes.
 '''
 
 st.subheader('Explainability & Interpretability')
@@ -61,13 +61,17 @@ Since the Cox regression model is a linear model, feature coefficients can be ex
 A positive coefficient indicates a higher risk of hospital closure, while a negative coefficient indicates a protective effect.
 '''
 st.space('small')
-st.image("./images/coefs.png", width=600)
-st.caption("Model features with non-zero coefficients")
+st.image("./images/neg_coefs.png", width=600)
+st.caption("Model features with negative coefficients")
+st.image("./images/pos_coefs.png", width=500)
+st.caption("Model features with positive coefficients")
 st.space('small')
+
+
 st.write(
     "The exponentiated coefficients, also known as hazard ratios, show the effect size of each feature. "
-    "For example, being a Voluntary non-profit - Private hospital reduces the hazard by a factor of "
-    "$e^{-0.521394}$, or about 59%, indicating a lower chance of hospital closure."
+    "For example, having a RUCA score of 1 reduces the risk score by a factor of "
+    "$e^{-0.078098}$, or about 92%, indicating a lower chance of hospital closure."
 )
 
 st.markdown("#### Permutation Importance Scores")
@@ -77,12 +81,12 @@ Permutation feature importance will measure how much the model's concordance ind
 A high score indicates the feature is used heavily by the model to make accurate predictions; a low score indicates the model does not heavily rely on the feature's value when making predictions, suggesting the feature might be irrelevant, redundant, or mostly "noise".
 '''
 st.space('small')
-st.image("./images/HighPerm.png", width=450)
+st.image("./images/HighPerm.png", width=550)
 st.caption("Model features with high permutation importance scores")
 st.space('small')
 
 st.space('small')
-st.image("./images/LowPerm.png", width=600)
+st.image("./images/LowPerm.png", width=350)
 st.caption("Model features with low permutation importance scores")
 st.space('small')
 

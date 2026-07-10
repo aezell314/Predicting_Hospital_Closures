@@ -17,14 +17,12 @@ with st.sidebar:
 # -----------------------------
 st.subheader('Executive summary')
 '''
-This project combines financial health, operational metrics, and local demographic data to predict the likelihood that a rural US acute care hospital will close or convert their operations between 2010 and 2025. 
-Features include operating margins, hospital quality, ownership structure (for-profit vs. non-profit), and regional healthcare utilization and demographic data.
+This project combines financial health, ownership structure, operational metrics, and local healthcare utilization data to predict the likelihood that a rural US acute care hospital will close or convert their operations between 2010 and 2025. 
 '''
 
 st.subheader('Background')
 '''
-There have been 154 Rural hospital Closures and Conversions since 2010, with the annual total of rural hospital closures spiking in 2023. 
-Rural hospital closures and conversions often leave nearby residents without access to proximate health care. 
+Rural hospitals are in a crisis. There have been 154 rural hospital closures and conversions since 2010 (86 complete closures and 68 converted closures). 
 '''
 st.markdown("Hospital closures have severe repercussions including the availability of health care in many communities, the travel time to distant alternative facilities, increased unemployment for health care workers, and stagnation in local economies. A better understanding of hospital closures, therefore, could help inform hospital managers and guide corrective actions to avoid closures <a href='#cite-1'>[1]</a>.", unsafe_allow_html=True)
 
@@ -44,24 +42,18 @@ A facility that no longer provides health services is considered a "complete clo
 A Rural Emergency Hospital (REH) is a Medicare provider designation created by Congress in 2021 to prevent rural hospital closures. REHs provide 24/7 emergency care and observation services but do not have inpatient beds. They receive enhanced Medicare payments to sustain outpatient care. The REH designation became effective on January 1, 2023.
 '''
 
-st.subheader('Project Scope & Assumptions')
-
-st.markdown(""" The scope of this project is limited to rural acute care hospitals in the United States. The Sheps dataset on rural hospital closures (see <a href='#cite-4'>[4]</a>) was extremely helpful for this project; it would have required a significant manual effort to amass the same closure data on non-rural hospitals. Thus, it made sense to scope the entire project to rural hospitals so as not to compare strictly rural closed hospitals with both rural and non-rural operational hospitals.
-In addition, this project treats full hospital closures and converted closures the same.
-""", unsafe_allow_html=True)
-
-
 st.subheader('What is a rural hospital?')
 st.markdown("""
-The Federal Office of Rural Health Policy's (FORHP) has a specific definition of a rural area; this definition is used to determine whether a hospital can apply for rural health grants, for example. 
-FORHP defines the following areas as rural:
-* Non-metropolitan counties
-* Outlying metropolitan counties with no population from an urban area of 50,000 or more people
-* Census tracts with RUCA codes 4-10 in metropolitan counties
-* Census tracts of at least 400 square miles in area with population density of 35 or fewer people per square mile with RUCA codes 2-3 in metropolitan counties
-* Census tracts with RRS 5 and RUCA codes 2-3 that are at least 20 square miles in area in metropolitan counties
-
-Based on 2020 Census data, FORHP considers 19.3% of the population (64.5 million people) and 87.7% of the land area of the country to be rural.
+For the purposes of this project, a rural hospital is defined as:
+* A Critical Access Hospital, or
+* A Rural Emergency Hospital, or
+* Any short-term, general acute, non-federal hospital that meets the Federal Office of Rural Health Policy's (FORHP) definition of a rural area; this definition is used to determine whether a hospital can apply for rural health grants, for example. 
+    * FORHP defines the following areas as rural:
+        * Non-metropolitan counties
+        * Outlying metropolitan counties with no population from an urban area of 50,000 or more people
+        * Census tracts with RUCA codes 4-10 in metropolitan counties
+        * Census tracts of at least 400 square miles in area with population density of 35 or fewer people per square mile with RUCA codes 2-3 in metropolitan counties
+        * Census tracts with RRS 5 and RUCA codes 2-3 that are at least 20 square miles in area in metropolitan counties
 
 The United States Census Bureau (Census), the Office of Management and Budget (OMB), and the United States Department of Agriculture Economic Research Service (ERS) each has their own definition of rural for their own purposes, but none of these are granular enough to use for rural health policy. 
 The use of Rural-Urban Commuting Area (RUCA) codes and Road Ruggedness Scale (RRS) codes allows the assessment of rurality on a smaller, census-tract level. 

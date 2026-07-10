@@ -7,29 +7,36 @@ st.set_page_config(
 )
 
 st.subheader('Final Conclusions')
+st.markdown(""" ###### Overall Takeaways
+Hospital closure risk is primarily driven by external geographical and socioeconomic factors, alongside hospital ownership type and patient-reported hospital evaluation metrics. 
+Surprisingly, basic financial metrics were less direct or consistent predictors of hospital closure.
+""")
 st.markdown(""" ###### Hospital Features
 
-* **Hospital ownership structure** is the largest driver of closure risk, with high coefficient magnitudes and high permutation feature importances. 
-* A hospital being structured as a **Voluntary Non-Profit - Private** hospital - owned by independent, secular community organizations or private foundations rather than a government entity or corporate shareholders - provides a large protective effect.
-* On the other hand, a hospital operating as a **Voluntary Non-Profit - Other** facility - indicating it is owned by specific non-community groups, such as religious orders, universities, or a distinct not-for-profit corporation - increases risk of closure.
+* **Hospital-specific features** such as ownership type represent meaningful contributors to closure risk.
+* A hospital being non-profit emerges as the highest mean SHAP value and has a positive permutation feature importance score, indicating strong relationships with other features.
+    * For-profit and government-owned hospitals tend to have lower risks of closure than non-profit hospitals.
 """)
 st.markdown(""" ###### Financial Metrics
             
-* Hospital financial metrics such as **debt ratio** and **equity ratio** affect a hospital's risk of closure (in opposite directions), but typically not to a high degree. 
-* **Debt ratio** measures the proportion of a hospital's assets that are financed by debt. A higher debt ratio may indicate greater financial leverage and, potentially, higher financial risk.
-* **Equity ratio** shows the proportion of assets financed by equity, representing the financial stability of the hospital. A higher ratio generally means a stronger financial position with less reliance on debt.
-* **Total adjusted salaries** also appeared as an influential feature based on a positive permutation importance score and a relatively large mean SHAP score, but did not end up with a non-zero coefficient due to the amount of regularization imposed.
-* No other hospital financial metrics emerged as important features to the model.
+* **Hospital financial metrics**, such as debt, equity, and employee salaries, were notably absent from the top model features by SHAP value and coefficient magnitude. 
+* There is a positive permutation feature importance score associated with Net Profit Margin, indicating that feature might have non-linear relationships with other features that affect model predictions.
 """)
 st.markdown(""" ###### AHRF Features
 
-* **Area Health Resource** features are a more complicated picture. Distribution of area hospitals that have a **very low average bed occupancy (0% - 39%)**, typically indicative of regions with underutilized or financially fragile hospital infrastructure, lowers the overall risk score but has a negative permutation importance score, so might not be relevant.
-* **Short Term General Hospital Admissions** represent the strongest protective effect against closure based on the coefficient magnitude, as well as a high permutation importance score and mean SHAP score. This suggests that rural hospitals in counties with consistently utilized hospital infrastructure are more likely to be long-lasting.
-* **Total Active D.O.s (Doctors of Osteopathic Medicine)** increases closure risk score; this could reflects a workforce more focused on primary care than specialized inpatient medicine that typically generates more revenue.
+* **Area Health Resource** features emerge as extremely important predictors of hospital closure. All of the 16 features with non-zero coefficients were either AHRF features or features that related to area geography.
+* In summary, hospitals that are located in more affluent counties, with high healthcare availability and utilization, tend to have a lower risk of closure.
+* The total number of area hospitals per capita tends to increase risk score, perhaps suggesting too much competition from area hospitals can be a factor leading up to hospital closure.            
 """)
 
 st.markdown(""" ###### Hospital Quality Metrics
-* No hospital quality metrics, such as patient satisfaction survey scores or mortality and readmission metrics, emerged as important features to the model. 
+* None of the **HCAHPS (Hospital Consumer Assessment of Healthcare Providers and Systems)** survey results had non-zero model coeffients, but many of them had relatively large average SHAP scores, indicating the values interact with other features to influence model predictions. 
+* High scores (or affirmative answers) on the following questions tend to lower the risk of hospital closure:
+    * How often did staff explain about medicines before giving them to patients? (explain_score)
+    * Would patients recommend the hospital to friends and family? (recommend_score)
+    * How often were the patients' rooms and bathrooms kept clean? (clean_score)
+* Several HCAHPS features (nsurveys, explain_score, info_score, and understood_score) had negative permutation feature importance scores, suggesting their values do not meaningfully influence predictions.
+* Process of Care scores, as well as mortality and readmission data, had too many missing values and so were excluded from the model.
 """)
 
 st.subheader('Limitations')
