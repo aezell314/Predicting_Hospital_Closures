@@ -5,6 +5,7 @@ import utils
 import numpy as np
 import shap
 import matplotlib.pyplot as plt
+from pathlib import Path
  
 st.set_page_config(
     page_title="Rural Hospital Risk Dashboard",
@@ -17,8 +18,9 @@ st.set_page_config(
 # -----------------------------
 @st.cache_resource
 def load_artifacts():
-    model = joblib.load("./data/hospital_closure_model.pkl")
-    preprocessor = joblib.load("./data/preprocessor.pkl")
+    base_dir = Path(__file__).parent.parent
+    model = joblib.load(base_dir / "data" / "hospital_closure_model.pkl")
+    preprocessor = joblib.load(base_dir / "data" / "preprocessor.pkl")
     train_unscaled = utils.train_unscaled  # raw, unprocessed training data
     train_scaled = utils.train_scaled  # preprocessed training data
     test_data = utils.test  # preprocessed test data with predicted risk scores appended
