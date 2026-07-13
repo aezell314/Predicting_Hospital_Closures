@@ -1,11 +1,14 @@
-import streamlit as st
+from pathlib import Path
 import pandas as pd
+import streamlit as st
 
-data_path = Path(__file__).parent / "data" / "train_scaled.pkl"
-train_scaled = pd.read_pickle(str(data_path))
+@st.cache_data
+def load_data():
+    base_dir = Path(__file__).parent
+    train_scaled = pd.read_pickle(base_dir / "data" / "train_scaled.pkl")
+    train_unscaled = pd.read_pickle(base_dir / "data" / "train_unscaled.pkl")
+    test = pd.read_pickle(base_dir / "data" / "test_data_with_pred.pkl")
+    return train_scaled, train_unscaled, test
 
-data_path = Path(__file__).parent / "data" / "train_unscaled.pkl"
-train_unscaled = pd.read_pickle(str(data_path))
+train_scaled, train_unscaled, test = load_data()
 
-data_path = Path(__file__).parent / "data" / "test_data_with_pred.pkl"
-test = pd.read_pickle(str(data_path))
