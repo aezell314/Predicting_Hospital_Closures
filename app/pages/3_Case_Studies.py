@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 st.set_page_config(
     page_title="Case Study",
@@ -13,7 +14,12 @@ st.subheader('Case Study: Olmsted Medical Center')
 Olmsted Medical Center is a non-profit community healthcare provider in Rochester, Minnesota. 
 It operates a 61-bed acute care hospital, a 24-hour Level IV trauma emergency department, and more than 20 regional clinic locations offering over 35 medical specialties.
 '''
-st.image("./images/Olmsted_Health.png", width=600)
+img_path = Path(__file__).parent / "images" / "Olmsted_Health.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=600)
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption('Covenant Health Hobbs Hospital in in Rochester, MN')
 
 '''
@@ -22,18 +28,21 @@ The risk score plateaus at around 1 for 2024 and 2025, which is not particularly
 
 This paints the picture of a hospital that is "at-risk" - it is not in immediate danger of closing, but may be losing some of the protective factors that influenced the low risk score in 2022.
 '''
+img_path = Path(__file__).parent / "images" / "olmsted_scores.png"
 
-try:
-    st.image('images/olmsted_scores.png', width=600)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/olmsted_scores.png', width=600)
+if img_path.exists():
+    st.image(str(img_path), width=600)
+else:
+    st.error(f"File not found at: {img_path}")
 '''
 The SHAP plots for Olmsted Health for 2023 and 2024 help illustrate which features are contributing to the large uptick in risk. 
 '''
-try:
-    st.image('images/case_study_1.png')
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/case_study_1.png')
+img_path = Path(__file__).parent / "images" / "case_study_1.png"
+
+if img_path.exists():
+    st.image(str(img_path))
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption('SHAP Waterfall Plot for Olmsted Health, 2023')
 
 st.markdown("""
@@ -41,11 +50,12 @@ In 2023, Olmsted Health benefited from several protective factors related to pos
 """)
 
 st.space('small')
+img_path = Path(__file__).parent / "images" / "case_study_2.png"
 
-try:
-    st.image('images/case_study_2.png')
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/case_study_2.png')
+if img_path.exists():
+    st.image(str(img_path))
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption('SHAP Waterfall Plot for Olmsted Health, 2024')
 
 st.markdown("""

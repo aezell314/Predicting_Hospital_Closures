@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 st.set_page_config(
     page_title="Modeling Closure Risk",
@@ -31,10 +32,13 @@ The train set was further split into 5 "folds" using scikit-learn's TimeSeriesSp
 '''
 
 st.space('small')
-try:
-    st.image('images/TimeSeriesSplit.png', width=900)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/TimeSeriesSplit.png', width=900)
+img_path = Path(__file__).parent / "images" / "TimeSeriesSplit.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=900)
+else:
+    st.error(f"File not found at: {img_path}")
+
 st.markdown("Visualization of 5-fold cross-validation using a time series split. <a href='#cite-1'>[1]</a>. ", unsafe_allow_html=True)
 st.space('small')
 
@@ -64,15 +68,19 @@ Since the Cox regression model is a linear model, feature coefficients can be ex
 A positive coefficient indicates a higher risk of hospital closure, while a negative coefficient indicates a protective effect.
 '''
 st.space('small')
-try:
-    st.image('images/neg_coefs.png', width=600)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/neg_coefs.png', width=600)
+img_path = Path(__file__).parent / "images" / "neg_coefs.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=600)
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption("Model features with negative coefficients")
-try:
-    st.image('images/pos_coefs.png', width=500)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/pos_coefs.png', width=500)
+img_path = Path(__file__).parent / "images" / "pos_coefs.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=500)
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption("Model features with positive coefficients")
 st.space('small')
 
@@ -90,18 +98,22 @@ Permutation feature importance will measure how much the model's concordance ind
 A high score indicates the feature is used heavily by the model to make accurate predictions; a low score indicates the model does not heavily rely on the feature's value when making predictions, suggesting the feature might be irrelevant, redundant, or mostly "noise".
 '''
 st.space('small')
-try:
-    st.image('images/HighPerm.png', width=550)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/HighPerm.png', width=550)
+img_path = Path(__file__).parent / "images" / "HighPerm.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=550)
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption("Model features with high permutation importance scores")
 st.space('small')
 
 st.space('small')
-try:
-    st.image('images/LowPerm.png', width=350)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/LowPerm.png', width=350)
+img_path = Path(__file__).parent / "images" / "LowPerm.png"
+
+if img_path.exists():
+    st.image(str(img_path), width=350)
+else:
+    st.error(f"File not found at: {img_path}")
 st.caption("Model features with low permutation importance scores")
 st.space('small')
 
@@ -110,10 +122,12 @@ st.markdown("#### SHAP Scores")
 The impact of each feature can also be captured by SHAP (SHapley Additive exPlanations) scores. 
 Each SHAP value represents the amount that a specific feature's value pushed the hospital closure risk score up or down relative to the baseline risk.
 '''
-try:
-    st.image('images/shap_summary_bar_plot.png')
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/shap_summary_bar_plot.png')
+img_path = Path(__file__).parent / "images" / "shap_summary_bar_plot.png"
+
+if img_path.exists():
+    st.image(str(img_path))
+else:
+    st.error(f"File not found at: {img_path}")
 
 st.subheader("References")
 st.markdown("<span id='cite-1'>[1]</span> En-nasiry, Mouad. *Time Series Splitting Techniques: Ensuring Accurate Model Validation* 2024 June 18. https://medium.com/@mouadenna/time-series-splitting-techniques-ensuring-accurate-model-validation-5a3146db3088", unsafe_allow_html=True)
