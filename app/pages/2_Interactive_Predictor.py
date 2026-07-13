@@ -31,7 +31,7 @@ def load_artifacts():
 def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
     med = lambda col: train_unscaled[col].median()
     mode = lambda col: train_unscaled[col].mode()[0]
- 
+
     return {
         "Medicaid charges": med("Medicaid charges"),
         "STATEMENT OF REVENUES AND EXPENSES: Net Income (G3_C1_29)": med(
@@ -146,7 +146,6 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
         "Emergency Services": mode("Emergency Services"),
         "RUCA": mode("RUCA"),
         "Metro_Status": mode("Metro_Status"),
-        "Status": mode("Status"),
         "Hospital Type": mode("Hospital Type"),
         "nsurveys": med("nsurveys"),
         "rrate": med("rrate"),
@@ -161,6 +160,37 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
         "quiet_score": med("quiet_score"),
         "recommend_score": med("recommend_score"),
         "understood_score": med("understood_score"),
+        # New Medical Outcome Rate Metrics
+        "ami_mort_rate": med("ami_mort_rate"),
+        "ami_readm_rate": med("ami_readm_rate"),
+        "hf_mort_rate": med("hf_mort_rate"),
+        "hf_readm_rate": med("hf_readm_rate"),
+        "pn_mort_rate": med("pn_mort_rate"),
+        "pn_readm_rate": med("pn_readm_rate"),
+        "all_readm_rate": med("all_readm_rate"),
+        "hk_readm_rate": med("hk_readm_rate"),
+        "copd_mort_rate": med("copd_mort_rate"),
+        "copd_readm_rate": med("copd_readm_rate"),
+        "stk_mort_rate": med("stk_mort_rate"),
+        "stk_readm_rate": med("stk_readm_rate"),
+        "cabg_mort_rate": med("cabg_mort_rate"),
+        "cabg_readm_rate": med("cabg_readm_rate"),
+        # New Medical Patient Volume Metrics
+        "ami_mort_npatients": med("ami_mort_npatients"),
+        "ami_readm_npatients": med("ami_readm_npatients"),
+        "hf_mort_npatients": med("hf_mort_npatients"),
+        "hf_readm_npatients": med("hf_readm_npatients"),
+        "pn_mort_npatients": med("pn_mort_npatients"),
+        "pn_readm_npatients": med("pn_readm_npatients"),
+        "all_readm_npatients": med("all_readm_npatients"),
+        "hk_readm_npatients": med("hk_readm_npatients"),
+        "copd_mort_npatients": med("copd_mort_npatients"),
+        "copd_readm_npatients": med("copd_readm_npatients"),
+        "stk_mort_npatients": med("stk_mort_npatients"),
+        "stk_readm_npatients": med("stk_readm_npatients"),
+        "cabg_mort_npatients": med("cabg_mort_npatients"),
+        "cabg_readm_npatients": med("cabg_readm_npatients"),
+        # Demographic & Geographic Features
         "% <65 without Health Insurance": med("% <65 without Health Insurance"),
         "Dist Hosp By 00 - 39% Util Rate Short Term General Hospitals": med(
             "Dist Hosp By 00 - 39% Util Rate Short Term General Hospitals"
@@ -202,15 +232,11 @@ def build_baseline_features(train_unscaled: pd.DataFrame) -> dict:
             "Per Capita Total Active M.D.s Non-Federal"
         ),
         "Per Capita Total Medicare Inpatient Days Short Term General Hospitals": med(
-            "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"
-        ),
-        "Per Capita Total Number Hospitals": med(
-            "Per Capita Total Number Hospitals"
-        ),
+            "Per Capita Total Medicare Inpatient Days Short Term General Hospitals"),
+        "Per Capita Total Number Hospitals": med("Per Capita Total Number Hospitals"),
         "Percent Persons in Poverty": med("Percent Persons in Poverty"),
-        "Population Estimate": med("Population Estimate"),
-        "Unemployment Rate, 16+": med("Unemployment Rate, 16+"),
-    }
+        "Population Estimate": med("Population Estimate"),"Unemployment Rate, 16+": med("Unemployment Rate, 16+")
+        }
  
  
 def build_features(baseline_features: dict, inputs: dict) -> dict:
