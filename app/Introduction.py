@@ -29,7 +29,10 @@ st.markdown("Hospital closures have severe repercussions including the availabil
 st.markdown(""" Over the same period (since 2010), rural adults have experienced higher rates of mortality from heart disease, cancer, unintentional injury, and stroke relative to urban adults.
 Declining healthcare access combined with worsening health outcomes for rural populations represents a major policy challenges for US healthcare <a href='#cite-2'>[2]</a>. """, unsafe_allow_html=True)
 
-st.image("./images/closure_plot.png", width=600)
+try:
+    st.image('images/closure_plot.png', width=600)
+except st.runtime.media_file_storage.MediaFileStorageError:
+    st.image('../images/closure_plot.png', width=600)
 
 st.subheader('What is a hospital closure?')
 
@@ -69,13 +72,18 @@ with fin_col1:
     """)
 
 with fin_col2:
-    st.image('./images/CMS.png', width=250)
-
+    try:
+        st.image('images/CMS.png', width=250)
+    except st.runtime.media_file_storage.MediaFileStorageError:
+        st.image('../images/CMS.png', width=250)
 
 arhf_col1, arhf_col2 = st.columns([1, 3], vertical_alignment='center')
 
 with arhf_col1:
-    st.image('./images/HRSA.jpg', width=200)
+    try:
+        st.image('images/HRSA.jpg', width=200)
+    except st.runtime.media_file_storage.MediaFileStorageError:
+        st.image('../images/HRSA.jpg', width=200)
 
 with arhf_col2:
     st.markdown(""" **Area Health Resource Data** was sourced from Area Health Resources Files, which are made available via the US Health Resources and Services Administration's Data Warehouse.
@@ -98,7 +106,10 @@ with hosp_col1:
     """)
 
 with hosp_col2:
-    st.image('./images/Sheps.png', width=200)
+    try:
+        st.image('images/Sheps.png', width=200)
+    except st.runtime.media_file_storage.MediaFileStorageError:
+        st.image('../images/Sheps.png', width=200)
 
 st.subheader("References")
 st.markdown("<span id='cite-1'>[1]</span> Pai DR, Hosseini H, Brown RS. *Does efficiency and quality of care affect hospital closures?* Health Syst (Basingstoke). 2017 Dec 7;8(1):17-30. doi: 10.1080/20476965.2017.1405874. PMID: 31214352; PMCID: PMC6508065.", unsafe_allow_html=True)

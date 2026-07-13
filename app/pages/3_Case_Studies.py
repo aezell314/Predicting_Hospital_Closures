@@ -23,13 +23,17 @@ The risk score plateaus at around 1 for 2024 and 2025, which is not particularly
 This paints the picture of a hospital that is "at-risk" - it is not in immediate danger of closing, but may be losing some of the protective factors that influenced the low risk score in 2022.
 '''
 
-st.image('./images/olmsted_scores.png', width=600)
-
+try:
+    st.image('images/olmsted_scores.png', width=600)
+except st.runtime.media_file_storage.MediaFileStorageError:
+    st.image('../images/olmsted_scores.png', width=600)
 '''
 The SHAP plots for Olmsted Health for 2023 and 2024 help illustrate which features are contributing to the large uptick in risk. 
 '''
-
-st.image('./images/case_study_1.png')
+try:
+    st.image('images/case_study_1.png')
+except st.runtime.media_file_storage.MediaFileStorageError:
+    st.image('../images/case_study_1.png')
 st.caption('SHAP Waterfall Plot for Olmsted Health, 2023')
 
 st.markdown("""
@@ -38,7 +42,10 @@ In 2023, Olmsted Health benefited from several protective factors related to pos
 
 st.space('small')
 
-st.image('./images/case_study_2.png')
+try:
+    st.image('images/case_study_2.png')
+except st.runtime.media_file_storage.MediaFileStorageError:
+    st.image('../images/case_study_2.png')
 st.caption('SHAP Waterfall Plot for Olmsted Health, 2024')
 
 st.markdown("""
@@ -53,9 +60,7 @@ st.markdown("""
  The relative decline in M.D.s per capita and total Medicare inpatient days per capita could be due to population growth diluting the physician population, high physician retirement rates, and/or an increase in physician assistants over traditional M.D.s.
             
 Plots like the ones above can help hospital executives asses the factors that influence their risk of closure in either direction, as well as monitor year-over-year trends.
-
-            """)
-
+""")
 
 
 st.subheader("References")
