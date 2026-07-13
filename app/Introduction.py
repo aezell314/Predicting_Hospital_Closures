@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 st.set_page_config(layout="wide")
 
@@ -29,10 +30,14 @@ st.markdown("Hospital closures have severe repercussions including the availabil
 st.markdown(""" Over the same period (since 2010), rural adults have experienced higher rates of mortality from heart disease, cancer, unintentional injury, and stroke relative to urban adults.
 Declining healthcare access combined with worsening health outcomes for rural populations represents a major policy challenges for US healthcare <a href='#cite-2'>[2]</a>. """, unsafe_allow_html=True)
 
-try:
-    st.image('images/closure_plot.png', width=600)
-except st.runtime.media_file_storage.MediaFileStorageError:
-    st.image('../images/closure_plot.png', width=600)
+# Locate the images folder dynamically
+img_path = Path(__file__).parent / "images" / "closure_plot.png"
+
+# Display the image safely
+if img_path.exists():
+    st.image(str(img_path), width=600)
+else:
+    st.error(f"File not found at: {img_path}")
 
 st.subheader('What is a hospital closure?')
 
