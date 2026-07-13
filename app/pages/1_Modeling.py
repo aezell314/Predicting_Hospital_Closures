@@ -32,7 +32,7 @@ The train set was further split into 5 "folds" using scikit-learn's TimeSeriesSp
 '''
 
 st.space('small')
-img_path = Path(__file__).parent / "images" / "TimeSeriesSplit.png"
+img_path = Path(__file__).parent.parent / "images" / "TimeSeriesSplit.png"
 
 if img_path.exists():
     st.image(str(img_path), width=900)
@@ -68,14 +68,14 @@ Since the Cox regression model is a linear model, feature coefficients can be ex
 A positive coefficient indicates a higher risk of hospital closure, while a negative coefficient indicates a protective effect.
 '''
 st.space('small')
-img_path = Path(__file__).parent / "images" / "neg_coefs.png"
+img_path = Path(__file__).parent.parent / "images" / "neg_coefs.png"
 
 if img_path.exists():
     st.image(str(img_path), width=600)
 else:
     st.error(f"File not found at: {img_path}")
 st.caption("Model features with negative coefficients")
-img_path = Path(__file__).parent / "images" / "pos_coefs.png"
+img_path = Path(__file__).parent.parent / "images" / "pos_coefs.png"
 
 if img_path.exists():
     st.image(str(img_path), width=500)
@@ -98,7 +98,7 @@ Permutation feature importance will measure how much the model's concordance ind
 A high score indicates the feature is used heavily by the model to make accurate predictions; a low score indicates the model does not heavily rely on the feature's value when making predictions, suggesting the feature might be irrelevant, redundant, or mostly "noise".
 '''
 st.space('small')
-img_path = Path(__file__).parent / "images" / "HighPerm.png"
+img_path = Path(__file__).parent.parent / "images" / "HighPerm.png"
 
 if img_path.exists():
     st.image(str(img_path), width=550)
@@ -108,7 +108,7 @@ st.caption("Model features with high permutation importance scores")
 st.space('small')
 
 st.space('small')
-img_path = Path(__file__).parent / "images" / "LowPerm.png"
+img_path = Path(__file__).parent.parent / "images" / "LowPerm.png"
 
 if img_path.exists():
     st.image(str(img_path), width=350)
@@ -122,7 +122,7 @@ st.markdown("#### SHAP Scores")
 The impact of each feature can also be captured by SHAP (SHapley Additive exPlanations) scores. 
 Each SHAP value represents the amount that a specific feature's value pushed the hospital closure risk score up or down relative to the baseline risk.
 '''
-img_path = Path(__file__).parent / "images" / "shap_summary_bar_plot.png"
+img_path = Path(__file__).parent.parent / "images" / "shap_summary_bar_plot.png"
 
 if img_path.exists():
     st.image(str(img_path))
