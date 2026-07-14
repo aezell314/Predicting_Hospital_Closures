@@ -86,9 +86,10 @@ st.space('small')
 
 
 st.write(
-    "The exponentiated coefficients, also known as hazard ratios, show the effect size of each feature. "
-    "For example, having a RUCA score of 1 reduces the risk score by a factor of "
-    "$e^{-0.078098}$, or about 92%, indicating a lower chance of hospital closure."
+    """
+    The exponentiated coefficients, also known as hazard ratios, show the effect size of each feature. 
+    For example, having a RUCA score of 1 reduces the risk score by a factor of $$e^{-0.078098} \\approx 0.92$$, or about 8%.
+    """
 )
 
 st.markdown("#### Permutation Importance Scores")
